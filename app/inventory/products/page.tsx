@@ -1,4 +1,22 @@
+'use client'
+
+import{ useState, useEffect } from 'react'
+import Link from 'next/link'
+import productsData from './sample/dummy_products.json'
+
+type ProductsData = {
+  id: number,
+  name: string,
+  price: number,
+  description: string
+}
+
 export default function Page () {
+  const [products, setProducts] = useState<Array<ProductsData>>([])
+  useEffect(() => {
+    setProducts(productsData)
+  }, [])
+
   return (
     <>
       <h2>商品一覧</h2>
@@ -11,33 +29,20 @@ export default function Page () {
             <th>単価</th>
             <th>説明</th>
             <th></th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>コットン100%バックリボンティアードワンピース（黒）</td>
-            <td>6900</td>
-            <td>大人の可愛らしさを引き立てる、ナチュラルな風合い。リラックス×トレンドを楽しめる、上品なティアードワンピース。</td>
-            <td>6900</td>
-            <td><button>更新・削除</button></td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>ライトストレッチカットソー（ネイビー）</td>
-            <td>2900</td>
-            <td>しなやかな肌ざわりが心地よい、程よいフィット感のカットソー。ビジネスカジュアルにも普段使いにも使える、ベーシックなデザイン。</td>
-            <td>6900</td>
-            <td><button>更新・削除</button></td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>ベルト付きデニムパンツ</td>
-            <td>5980</td>
-            <td>定番のデニムパンツに、フェミニンなベルトをプラスしたスタイリッシュなアイテム。カジュアルにもきれいめにも合わせやすい。</td>
-            <td>6900</td>
-            <td><button>更新・削除</button></td>
-          </tr>
+          {products.map((product: ProductsData) => (
+            <tr key={product.id}>
+              <td>{product.id}</td>
+              <td>{product.name}</td>
+              <td>{product.price}</td>
+              <td>{product.description}</td>
+              <td><Link href={'/inventory/products/${product.id}'}>在庫管理</Link></td>
+              <td><button>更新・削除</button></td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </>
