@@ -135,7 +135,7 @@ export default function Page () {
               <td>{product.name}</td>
               <td>{product.price}</td>
               <td>{product.description}</td>
-              <td><Link href={'/inventory/products/${product.id}'}>在庫管理</Link></td>
+              <td><Link href={`/inventory/products/${product.id}`}>在庫管理</Link></td>
               <td><button onClick={ () => handleEditRow(product.id) }>更新・削除</button></td>
             </tr>
             )

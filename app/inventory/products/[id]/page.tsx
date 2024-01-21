@@ -1,8 +1,54 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import productsData from '../sample/dummy_products.json'
+import inventoriesData from '../sample/dummy_inventories.json'
+
+type ProductsData = {
+  id: number | null
+  name: string
+  price: number
+  description: string
+}
+
+type InventoryData = {
+  id: number
+  type: string
+  date: string
+  unit: number
+  quantity: number
+  price: number
+  inventory: number
+}
+
 /**
  * 商品在庫画面
  */
 
 export default function Page() {
+  // 検索条件：商品ID
+  const params = {id: 1}
+  
+  // 読み込みデータを保持する。
+ const [product, setProduct] = useState<ProductsData>({
+  id: 0,
+  name: "",
+  price: 0,
+  description: ""
+ })
+
+ const [inventoryData, setInventoryData] = useState<Array<InventoryData>>([])
+
+ useEffect(() => {
+  const selectedProduct: ProductsData = productsData.find(value => value.id == params.id) ?? {
+    id: 0,
+    name: "",
+    price: 0,
+    description: ""
+  }
+  setProduct(selectedProduct)
+  setInventoryData(inventoriesData)
+ }, [])
 
   return (
     <>
@@ -11,7 +57,7 @@ export default function Page() {
       <form>
         <div>
           <label>商品名：</label>
-          <span>コットン100%バックリボンティアードワンピース（黒）</span>
+          <span>{product.name}</span>
         </div>
         <div>
           <label>数量：</label>
@@ -33,38 +79,16 @@ export default function Page() {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>卸し</td>
-            <td>2023-04-03 18:54:13</td>
-            <td>6900</td>
-            <td>2</td>
-            <td>13800</td>
-            <td>390</td>
-          </tr>
-          <tr>
-            <td>仕入れ</td>
-            <td>2023-04-03 18:54:13</td>
-            <td>6900</td>
-            <td>3</td>
-            <td>20700</td>
-            <td>392</td>
-          </tr>
-          <tr>
-            <td>卸し</td>
-            <td>2023-04-03 18:54:13</td>
-            <td>6900</td>
-            <td>10</td>
-            <td>69000</td>
-            <td>390</td>
-          </tr>
-          <tr>
-            <td>仕入れ</td>
-            <td>2023-04-03 18:54:13</td>
-            <td>6900</td>
-            <td>400</td>
-            <td>276000</td>
-            <td>400</td>
-          </tr>
+          {inventoriesData.map((inventory: InventoryData) => (
+            <tr>
+              <td>{inventory.type}</td>
+              <td>{inventory.date}</td>
+              <td>{inventory.unit}</td>
+              <td>{inventory.quantity}</td>
+              <td>{inventory.price}</td>
+              <td>{inventory.inventory}</td>
+            </tr>
+            ))}
         </tbody>
       </table>
     </>
