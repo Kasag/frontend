@@ -1,5 +1,21 @@
-import React from "react";
-import styles from "./products/styles.module.css"
+'use client'
+
+import {
+  AppBar,
+  Box,
+  Button,
+  Divider,
+  Drawer,
+  IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  ThemeProvider,
+  Toolbar,
+  Typography
+} from '@mui/material'
+import { Logout as LogoutIcon, Menu as MenuIcon } from '@mui/icons-material'
 
 // 引数はchildrenプロパティをもつオブジェクト
 // childrenプロパティはReactNode型の値をもつ。
@@ -10,16 +26,85 @@ export default function InventoryLayout({
 }) {
   return (
     <>
-      <div className={styles.layout}>
-        <header className={styles.header}>ヘッダー</header>
-        <div className={styles.container}>
-          <aside className={styles.navbar}>サイドバー</aside>
-          <main className={styles.content}>
-            <section>{ children }</section>
-          </main>
-        </div>
-        <footer className={styles.footer}>フッター</footer>
-      </div>
+      <Box sx={{ display: "flex" }}>
+        /** ヘッダー */
+        <AppBar position="fixed">
+          <Toolbar>
+            <IconButton>
+              <MenuIcon />
+            </IconButton>
+            <Typography
+              variant="h6"
+              noWrap
+              component="div"
+              sx={{ flexGrow: 1}}
+            >
+              在庫管理システム
+            </Typography>
+
+            <Button
+              variant="contained"
+              startIcon={<LogoutIcon />}
+            >
+              ログアウト
+            </Button>
+          </Toolbar>
+        </AppBar>
+
+        /** サイドバー */
+        <Drawer anchor="left">
+          <Box sx={{ width: 240 }}>
+            <Toolbar />
+            <Divider />
+            <List>
+              <ListItem component="a" href="/inventory/products" disablePadding>
+                <ListItemButton>
+                  <ListItemText primary="商品一覧" />
+                </ListItemButton>
+              </ListItem>
+              <Divider />
+
+              <ListItem component="a" href="/inventory/import_sales" disablePadding>
+                <ListItemButton>
+                  <ListItemText primary="売上一括登録" />
+                </ListItemButton>
+              </ListItem>
+              <Divider />
+            </List>
+          </Box>
+        </Drawer>
+
+        /** メインコンテンツ */
+        <Box
+          component="main"
+          sx={{
+            flexGrow: 1,
+            p: 3,
+            // AppBarの高さ分だけ下にずらす
+            marginTop: "64px",
+            width: "100%",
+            background: "white"
+          }}
+        >
+          { children }
+        </Box>
+
+        /** フッター */
+        <Box
+          component="footer"
+          sx={{
+            width: "100%",
+            position: "fixed",
+            textAlign: "center",
+            bottom: 0,
+            background: "#1976d2"
+          }}
+        >
+          <Typography variant="caption" color="white">
+            &copy; 2023 full stack web development
+          </Typography>
+        </Box>
+      </Box>
     </>
   )
 }
